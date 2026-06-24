@@ -6,7 +6,7 @@ function Reports() {
 
   useEffect(() => {
 
-    fetch("http://127.0.0.1:8000/report")
+    fetch("https://ai-data-intelligence-assistant.onrender.com/report")
       .then((res) => res.json())
       .then((data) => setReport(data));
 
@@ -44,7 +44,7 @@ function Reports() {
       <button
           onClick={() => {
             window.open(
-              "http://127.0.0.1:8000/download-report"
+              "https://ai-data-intelligence-assistant.onrender.com/download-report"
             );
           }}
           style={{

@@ -9,7 +9,7 @@ function DataCleaning({ dataset = [] }) {
     try {
 
       const response = await fetch(
-        "http://127.0.0.1:8000/clean",
+        "https://ai-data-intelligence-assistant.onrender.com/clean",
         {
           method: "POST",
         }
@@ -43,7 +43,7 @@ function DataCleaning({ dataset = [] }) {
   const downloadCleaned = () => {
 
     window.open(
-      "http://127.0.0.1:8000/download-cleaned",
+      "https://ai-data-intelligence-assistant.onrender.com/download-cleaned",
       "_blank"
     );
 

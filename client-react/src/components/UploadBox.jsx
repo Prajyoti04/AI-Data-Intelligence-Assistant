@@ -13,7 +13,7 @@ function UploadBox({ setStats, setPreview,setColumnNames,setDataset,setCorrelati
     try {
 
       const response = await fetch(
-        "http://127.0.0.1:8000/upload",
+        "https://ai-data-intelligence-assistant.onrender.com/upload",
         {
           method: "POST",
           body: formData,
