@@ -1,4 +1,5 @@
 import { useState } from "react";
+import API from "../services/api";
 
 function Predictions({ numericColumns = [] }) {
 
@@ -15,8 +16,7 @@ function Predictions({ numericColumns = [] }) {
 
     try {
 
-      const response = await fetch(
-        "https://ai-data-intelligence-assistant.onrender.com/predict",
+      const response = await fetch(`${API}/predict`,
         {
           method: "POST",
           headers: {

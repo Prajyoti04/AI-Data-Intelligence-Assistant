@@ -1,3 +1,4 @@
+import API from "../services/api";
 function UploadBox({ setStats, setPreview,setColumnNames,setDataset,setCorrelationMatrix,setNumericColumns,setRecommendation}) {
 
   const handleFileUpload = async (event) => {
@@ -12,13 +13,10 @@ function UploadBox({ setStats, setPreview,setColumnNames,setDataset,setCorrelati
 
     try {
 
-      const response = await fetch(
-        "https://ai-data-intelligence-assistant.onrender.com/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch(`${API}/upload`, {
+        method: "POST",
+        body: formData,
+      });
 
       const data = await response.json();
       console.log("Recommended Task:",data.recommended_task);

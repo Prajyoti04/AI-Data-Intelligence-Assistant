@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const API = axios.create({
-baseURL: "http://localhost:8000",
-});
+// src/services/api.js
+
+const API =
+  "https://ai-data-intelligence-assistant.onrender.com";
 
 export default API;

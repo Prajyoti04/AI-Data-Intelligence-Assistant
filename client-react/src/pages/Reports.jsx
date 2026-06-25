@@ -1,3 +1,4 @@
+import API from "../services/api";
 import { useEffect, useState } from "react";
 
 function Reports() {
@@ -6,12 +7,11 @@ function Reports() {
 
   useEffect(() => {
 
-    fetch("https://ai-data-intelligence-assistant.onrender.com/report")
+    fetch(`${API}/report`) 
       .then((res) => res.json())
       .then((data) => setReport(data));
 
   }, []);
-
   if (!report) {
     return <h2>Loading report...</h2>;
   }
@@ -43,9 +43,7 @@ function Reports() {
       </ul>
       <button
           onClick={() => {
-            window.open(
-              "https://ai-data-intelligence-assistant.onrender.com/download-report"
-            );
+            window.open(`${API}/download-report`);
           }}
           style={{
             marginTop: "20px",

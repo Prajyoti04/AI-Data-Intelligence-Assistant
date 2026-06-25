@@ -1,4 +1,5 @@
 import { useState } from "react";
+import API from "../services/api";
 
 function DataCleaning({ dataset = [] }) {
 
@@ -8,8 +9,7 @@ function DataCleaning({ dataset = [] }) {
 
     try {
 
-      const response = await fetch(
-        "https://ai-data-intelligence-assistant.onrender.com/clean",
+      const response = await fetch(`${API}/clean`, 
         {
           method: "POST",
         }
@@ -42,10 +42,7 @@ function DataCleaning({ dataset = [] }) {
 
   const downloadCleaned = () => {
 
-    window.open(
-      "https://ai-data-intelligence-assistant.onrender.com/download-cleaned",
-      "_blank"
-    );
+     window.open(`${API}/download-cleaned`, "_blank");
 
   };
 
