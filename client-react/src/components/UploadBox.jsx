@@ -18,7 +18,9 @@ function UploadBox({ setStats, setPreview,setColumnNames,setDataset,setCorrelati
         body: formData,
       });
 
-      const data = await response.json();
+      const data = await response.text();
+      console.log("Raw response:", text);
+      const data = JSON.parse(text);
       console.log("Recommended Task:",data.recommended_task);
 
       console.log(data);
