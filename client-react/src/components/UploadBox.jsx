@@ -12,40 +12,29 @@ function UploadBox({ setStats, setPreview,setColumnNames,setDataset,setCorrelati
     formData.append("file", file);
 
     try {
-
       const response = await fetch(`${API}/upload`, {
         method: "POST",
         body: formData,
       });
 
-      const data = await response.text();
-      console.log("Raw response:", text);
-      const data = JSON.parse(text);
-      console.log("Recommended Task:",data.recommended_task);
+      console.log("Status:", response.status);
 
-      console.log(data);
+      const data = await response.json();
+
+      console.log("Response:", data);
 
       setStats(data);
-
       setPreview(data.preview);
-      setColumnNames(data.column_names);
       setColumnNames(data.column_names);
       setDataset(data.dataset);
       setCorrelationMatrix(data.correlation_matrix);
       setRecommendation(data.recommended_task);
       setNumericColumns(data.numeric_columns);
-      console.log("Numeric columns:",data.numeric_columns);
-      
-      
 
       alert("Upload successful!");
-
     } catch (error) {
-
-      console.log(error);
-
+      console.error(error);
       alert(error.message);
-
     }
   };
 
