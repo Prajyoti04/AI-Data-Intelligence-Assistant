@@ -56,7 +56,7 @@ async def upload_file(file: UploadFile = File(...)):
 
     preview = df.head(10).fillna("").to_dict(orient="records")
 
-    full_data = df.fillna("").to_dict(orient="records")
+    full_data = df.head(100).fillna("").to_dict(orient="records")
 
     
     numeric_df = df.select_dtypes(include="number")

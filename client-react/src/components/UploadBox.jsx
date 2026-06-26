@@ -20,6 +20,9 @@ function UploadBox({ setStats, setPreview,setColumnNames,setDataset,setCorrelati
       console.log("Status:", response.status);
 
       const data = await response.json();
+      console.log(data);
+      console.log(Object.keys(data));
+      console.log(data.dataset?.length);
 
       console.log("Response:", data);
 

@@ -7,7 +7,13 @@ import ChatAssistant from "../components/ChatAssistant";
 import ScatterPlotView from "../components/ScatterPlotView";
 function Visualizations({ dataset, columnNames,correlationMatrix,recommendation }) {
 
-  const [selectedColumn, setSelectedColumn] = useState("GenderCode");
+  const [selectedColumn, setSelectedColumn] = useState("");
+
+        useEffect(() => {
+          if (columnNames.length > 0) {
+            setSelectedColumn(columnNames[0]);
+          }
+        }, [columnNames]);
 
   if (!dataset || dataset.length === 0) {
     return (
