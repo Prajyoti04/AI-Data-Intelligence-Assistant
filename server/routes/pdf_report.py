@@ -7,23 +7,21 @@ from reportlab.platypus import (
 )
 from reportlab.lib.styles import getSampleStyleSheet
 from datetime import datetime
+import pandas as pd
+import os
 
 router = APIRouter()
-
-current_df = None
-
-def set_pdf_dataframe(df):
-    global current_df
-    current_df = df
 
 
 @router.get("/download-report")
 async def download_report():
 
-    global current_df
+    if not os.path.exists("uploaded_dataset.csv"):
+        return {
+            "error": "No dataset uploaded"
+        }
 
-    if current_df is None:
-        return {"error": "No dataset uploaded"}
+    current_df = pd.read_csv("uploaded_dataset.csv")
 
     pdf_file = "analytics_report.pdf"
 
@@ -131,7 +129,7 @@ async def download_report():
 
             content.append(
                 Paragraph(
-                    f"Mean: {round(summary[col]['mean'],2)}",
+                    f"Mean: {round(summary[col]['mean'], 2)}",
                     styles["Normal"]
                 )
             )

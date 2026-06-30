@@ -1,23 +1,19 @@
 from fastapi import APIRouter
 import pandas as pd
+import os
 
 router = APIRouter()
 
-current_df = None
-
-def set_dataframe(df):
-    global current_df
-    current_df = df
 
 @router.get("/report")
 async def generate_report():
 
-    global current_df
-
-    if current_df is None:
+    if not os.path.exists("uploaded_dataset.csv"):
         return {
             "error": "No dataset uploaded"
         }
+
+    current_df = pd.read_csv("uploaded_dataset.csv")
 
     numeric_cols = current_df.select_dtypes(
         include=["int64", "float64"]

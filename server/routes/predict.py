@@ -2,17 +2,11 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from sklearn.linear_model import LinearRegression
 import pandas as pd
+import os
+from typing import Dict
 
 router = APIRouter()
 
-current_df = None
-
-def set_prediction_dataframe(df):
-    global current_df
-    current_df = df
-
-
-from typing import Dict
 
 class PredictionRequest(BaseModel):
     target: str
@@ -22,14 +16,15 @@ class PredictionRequest(BaseModel):
 @router.post("/predict")
 async def predict(data: PredictionRequest):
 
-    global current_df
-
-    if current_df is None:
+    if not os.path.exists("uploaded_dataset.csv"):
         return {
             "error": "Upload dataset first"
         }
 
+    current_df = pd.read_csv("uploaded_dataset.csv")
+
     target = data.target
+
     if target not in current_df.columns:
         return {
             "error": "Invalid target column"
@@ -47,8 +42,12 @@ async def predict(data: PredictionRequest):
         if col != target
     ]
 
-    X = current_df[features]
+    if len(features) == 0:
+        return {
+            "error": "No feature columns available for prediction"
+        }
 
+    X = current_df[features]
     y = current_df[target]
 
     model = LinearRegression()
@@ -60,8 +59,7 @@ async def predict(data: PredictionRequest):
 
         if col not in data.inputs:
             return {
-                "error":
-                f"Missing value for {col}"
+                "error": f"Missing value for {col}"
             }
 
         input_values.append(
@@ -76,7 +74,6 @@ async def predict(data: PredictionRequest):
     prediction = model.predict(input_df)
 
     return {
-        "prediction":
-            round(float(prediction[0]), 2),
+        "prediction": round(float(prediction[0]), 2),
         "features": features
     }
