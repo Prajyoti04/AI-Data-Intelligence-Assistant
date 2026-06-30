@@ -9,17 +9,25 @@ function UploadBox({ setStats, setPreview,setColumnNames,setDataset,setCorrelati
 
     const formData = new FormData();
 
-    formData.append("file", file);
+      formData.append("file", file);
 
-    try {
-      const response = await fetch(`${API}/upload`, {
-        method: "POST",
-        body: formData,
-      });
+      try {
+        const response = await fetch(`${API}/upload`, {
+          method: "POST",
+          body: formData,
+        });
 
-      console.log("Status:", response.status);
+        console.log("Status:", response.status);
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(`Upload failed with status ${response.status}`);
+      }
+
+      const text = await response.text();
+
+      console.log("Raw response:");
+      console.log(text);
+      const data = JSON.parse(text);
       console.log(data);
       console.log(Object.keys(data));
       console.log(data.dataset?.length);
