@@ -1,6 +1,5 @@
 from fastapi import APIRouter, UploadFile, File
 import pandas as pd
-import os
 
 router = APIRouter()
 
@@ -42,37 +41,80 @@ def recommend_ml_task(df):
 
 @router.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
+    try:
 
-    if file.filename.endswith(".csv"):
-        df = pd.read_csv(file.file)
-    else:
-        df = pd.read_excel(file.file)
+        # Read uploaded file
+        if file.filename.lower().endswith(".csv"):
+            df = pd.read_csv(file.file)
 
-    # Save uploaded dataset
-    df.to_csv("uploaded_dataset.csv", index=False)
+        elif file.filename.lower().endswith((".xlsx", ".xls")):
+            df = pd.read_excel(file.file, engine="openpyxl")
 
-    preview = df.head(10).fillna("").to_dict(orient="records")
+        else:
+            return {
+                "error": "Only CSV and Excel files are supported."
+            }
 
-    dataset = df.head(100).fillna("").to_dict(orient="records")
+        # Save uploaded dataset
+        try:
+            df.to_csv("uploaded_dataset.csv", index=False)
+        except Exception as e:
+            print("CSV Save Error:", e)
 
-    numeric_df = df.select_dtypes(include="number")
+        # Preview data
+        preview = (
+            df.head(10)
+            .fillna("")
+            .astype(str)
+            .to_dict(orient="records")
+        )
 
-    correlation_matrix = (
-        numeric_df.corr()
-        .fillna(0)
-        .round(2)
-        .to_dict()
-    )
+        dataset = (
+            df.head(100)
+            .fillna("")
+            .astype(str)
+            .to_dict(orient="records")
+        )
 
-    return {
-        "rows": len(df),
-        "columns": len(df.columns),
-        "missing_values": int(df.isnull().sum().sum()),
-        "duplicates": int(df.duplicated().sum()),
-        "preview": preview,
-        "column_names": list(df.columns),
-        "numeric_columns": list(numeric_df.columns),
-        "dataset": dataset,
-        "correlation_matrix": correlation_matrix,
-        "recommended_task": recommend_ml_task(df)
-    }
+        # Numeric columns
+        numeric_df = df.select_dtypes(include="number")
+
+        if numeric_df.empty:
+            correlation_matrix = {}
+        else:
+            correlation_matrix = (
+                numeric_df.corr()
+                .fillna(0)
+                .round(2)
+                .to_dict()
+            )
+
+        response = {
+            "rows": int(len(df)),
+            "columns": int(len(df.columns)),
+            "missing_values": int(df.isnull().sum().sum()),
+            "duplicates": int(df.duplicated().sum()),
+            "preview": preview,
+            "column_names": list(df.columns.astype(str)),
+            "numeric_columns": list(numeric_df.columns.astype(str)),
+            "dataset": dataset,
+            "correlation_matrix": correlation_matrix,
+            "recommended_task": recommend_ml_task(df)
+        }
+
+        print("Upload Successful")
+        print("Keys:", response.keys())
+
+        return response
+
+    except Exception as e:
+        import traceback
+
+        print("=" * 60)
+        print("UPLOAD ERROR")
+        traceback.print_exc()
+        print("=" * 60)
+
+        return {
+            "error": str(e)
+        }
