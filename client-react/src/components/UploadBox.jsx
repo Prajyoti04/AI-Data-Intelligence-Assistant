@@ -17,39 +17,48 @@ function UploadBox({
     const formData = new FormData();
     formData.append("file", file);
 
-    try {
-      const response = await fetch(`${API}/upload`, {
-        method: "POST",
-        body: formData,
-      });
+try {
+  const response = await fetch(`${API}/upload`, {
+    method: "POST",
+    body: formData,
+  });
 
-      console.log("HTTP Status:", response.status);
+  console.log("HTTP Status:", response.status);
+  console.log("Response OK:", response.ok);
 
-      if (!response.ok) {
-        throw new Error("Upload failed");
-      }
+  const text = await response.text();
 
-      const data = await response.json();
+  console.log("========== RAW RESPONSE ==========");
+  console.log(text);
+  console.log("==================================");
 
-      console.log("FULL DATA", data);
+  let data;
 
-      setStats(data);
-      setPreview(data.preview || []);
-      setColumnNames(data.column_names || []);
-      setDataset(data.dataset || []);
-      setCorrelationMatrix(data.correlation_matrix || {});
-      setRecommendation(data.recommended_task || {});
-      setNumericColumns(data.numeric_columns || []);
+  try {
+    data = JSON.parse(text);
+  } catch (e) {
+    console.error("JSON Parse Error");
+    console.error(e);
+    throw e;
+  }
 
-      alert("Success");
-    } catch (err) {
-      console.error("ERROR:", err);
-      console.error(err.stack);
+  console.log("Backend Response:", data);
 
-      alert(err.toString());
-    }
-  }; // ✅ THIS WAS MISSING
+  setStats(data);
+  setPreview(data.preview || []);
+  setColumnNames(data.column_names || []);
+  setDataset(data.dataset || []);
+  setCorrelationMatrix(data.correlation_matrix || {});
+  setRecommendation(data.recommended_task || {});
+  setNumericColumns(data.numeric_columns || []);
 
+  alert("Success");
+
+} catch (err) {
+  console.error(err);
+  alert(err.message);
+}//✅ THIS WAS MISSING
+  };
   return (
     <div
       style={{

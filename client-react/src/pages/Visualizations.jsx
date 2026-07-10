@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PieChartView from "../components/PieChartView";
 import BarChartView from "../components/BarChartView";
 import AIInsights from "../components/AIInsights";
@@ -205,37 +205,7 @@ const barData = [...chartData]
     </div>
   </div>
 );
-{xColumn && yColumn && (
 
-  <div
-    style={{
-      background:
-        "linear-gradient(135deg,#7C3AED,#DB2777)",
-      padding: "25px",
-      borderRadius: "20px",
-      boxShadow:
-        "0 8px 25px rgba(108,99,255,0.12)",
-      marginBottom: "25px",
-    }}
-  >
-
-    <h2
-      style={{
-        color: "#EC4899",
-      }}
-    >
-      📍 Scatter Plot
-    </h2>
-
-    <ScatterPlotView
-      data={dataset}
-      xColumn={xColumn}
-      yColumn={yColumn}
-    />
-
-  </div>
-
-)}
 }
 
 export default Visualizations;
