@@ -105,7 +105,9 @@ async def upload_file(file: UploadFile = File(...)):
         print("Upload Successful")
         print("Keys:", response.keys())
 
-        return response
+        from fastapi.responses import JSONResponse
+
+return JSONResponse(content=response)
 
     except Exception as e:
         import traceback
