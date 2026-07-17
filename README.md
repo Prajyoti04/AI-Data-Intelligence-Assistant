@@ -10,11 +10,6 @@ An end-to-end AI-powered analytics platform that enables users to upload dataset
 
 ---
 
-## 📸 Project Preview
-
-(Add screenshots or a GIF here)
-
----
 
 # ✨ Features
 
@@ -180,8 +175,6 @@ http://localhost:5173
 ### Prajyoti Patil
 
 🎓 B.E. Artificial Intelligence & Data Science
-
-📧 Email: your-email@example.com
 
 🔗 LinkedIn:
 https://www.linkedin.com/in/prajyoti-patil-057355313/
